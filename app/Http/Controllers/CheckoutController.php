@@ -102,38 +102,34 @@ class CheckoutController extends Controller
 
         $transaction->save();
 
-        // Config::$serverKey = config('midtrans.serverKey');
-        // Config::$isProduction = config('midtrans.isProduction');
-        // Config::$isSanitized = config('midtrans.isSanitized');
-        // Config::$is3ds = config('midtrans.is3ds');
+        Config::$serverKey = config('midtrans.serverKey');
+        Config::$isProduction = config('midtrans.isProduction');
+        Config::$isSanitized = config('midtrans.isSanitized');
+        Config::$is3ds = config('midtrans.is3ds');
 
-        // $midtrans_params = [
-        //     'transaction_details' => [
-        //         'order_id' => 'TEST-' . $transaction->id,
-        //         'gross_amount' => $transaction->transaction_total
-        //     ],
-        //     'customer_details' => [
-        //         'first_name' => $transaction->user->name,
-        //         'email' => $transaction->user->email
-        //     ],
-        //     'enabled_payments' => ['gopay'],
-        //     'vtweb' => []
-        // ];
+        $midtrans_params = [
+            'transaction_details' => [
+                'order_id' => 'TEST-' . $transaction->id,
+                'gross_amount' => $transaction->transaction_total
+            ],
+            'customer_details' => [
+                'first_name' => $transaction->user->name,
+                'email' => $transaction->user->email
+            ],
+            'enabled_payments' => ['gopay'],
+            'vtweb' => []
+        ];
 
-        // try {
-        //     $paymentUrl = Snap::createTransaction($midtrans_params)->redirect_url;
+        try {
+            $paymentUrl = Snap::createTransaction($midtrans_params)->redirect_url;
 
-        //     header('Location: ' . $paymentUrl);
+            header('Location: ' . $paymentUrl);
 
-        // } catch (Exception $e) {
-        //     echo $e->getMessage();
-        // }
-
-        Mail::to($transaction->user->email)->send(
-            new TransactionSuccess($transaction)
-        );
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
         
         // return $transaction;
-        return view('pages.success');
+        // return view('pages.success');
     }
 }

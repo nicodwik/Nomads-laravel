@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
+use App\Mail\TransactionSuccess;
+
 use Illuminate\Http\Request;
 use App\Transaction;
 use Midtrans\Config;
@@ -32,10 +35,16 @@ class MidtransController extends Controller
                     $transaction->transaction_status = 'CHALLENGE';
                 } else {
                     $transaction->transaction_status = 'SUCCESS';
+                    Mail::to($transaction->user->email)->send(
+                        new TransactionSuccess($transaction)
+                    );
                 }
             }
         } else if($status == 'settlement') {
             $transaction->transaction_status = 'SUCCESS';
+            Mail::to($transaction->user->email)->send(
+                new TransactionSuccess($transaction)
+            );
         } else if($status == 'pending') {
             $transaction->transaction_status = 'PENDING';
         } else if($status == 'deny') {
