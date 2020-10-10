@@ -62,4 +62,16 @@ class MidtransController extends Controller
             'message' => 'callback success'
         ]);
     }
+
+    public function successTransaction(Request $request) {
+        return view('pages.success');
+    }
+
+    public function pendingTransaction(Request $request) {
+        return view('pages.pending');
+    }
+
+    public function failedTransaction(Request $request) {
+        return view('pages.failed');
+    }
 }

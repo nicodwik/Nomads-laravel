@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/details/{slug}', 'DetailsController@index')->name('details');
+
 Route::post('/midtrans/callback', 'MidtransController@callback');
+Route::get('/midtrans/success', 'MidtransController@successTransaction');
+Route::get('/midtrans/pending', 'MidtransController@pendingTransaction');
+Route::get('/midtrans/failed', 'MidtransController@failedTransaction');
 
 Route::get('/checkout/{id}', 'CheckoutController@index')->name('checkout')->middleware(['auth', 'verified']);
 Route::post('/checkout/{id}', 'CheckoutController@process')->name('checkout-process')->middleware(['auth', 'verified']);
